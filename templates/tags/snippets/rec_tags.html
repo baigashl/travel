@@ -1,0 +1,13 @@
+
+<div class="after-post-tags">
+    <ul class="tags">
+        <li><h5 class="sitetitle">Popular Tags</h5></li>
+
+        {% for tag in top_tags %}
+            <li><a href="{% url "tags:detail" tag.slug %}">{{ tag }}</a></li>
+        {% empty %}
+
+        {% endfor %}
+
+    </ul>
+</div>

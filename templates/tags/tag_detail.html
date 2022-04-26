@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ block.super }}Tags{% endblock %}
+{% block script %}
+{% endblock %}
+{% block content %}
+
+{#    <div class="row m-2">#}
+{##}
+{#        <div class="col-sm-3 col-xs-12">#}
+{#            <div class="col-sm-3 col-xs-12">#}
+{#                <h1>{{ object.title }}</h1>#}
+{#                <p>Posts: {{ object.posts.all.count }}</p>#}
+{#            </div>#}
+{#        </div>#}
+{#        <div class="col-sm-9 col-xs-12">#}
+{#            {% for post_instance in object.posts.all %}#}
+{#                <div id="post-container">#}
+{#                    <div class="card mb-2 " style="width: 30rem;">#}
+{#                        <div class="card-body">#}
+{#                            <h5 class="card-title">{{ post_instance.title }}</h5>#}
+{#                            <a href="{{ post_instance.get_absolute_url }}"#}
+{#                               class="btn btn-secondary">View</a>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            {% empty %}#}
+{#                <p>No Tags yet.</p>#}
+{#            {% endfor %}#}
+{#        </div>#}
+{#    </div>#}
+{#    #########################}
+    <div class="container">
+
+	<div class="row">
+        <div class="col-md-8 col-md-offset-2 col-xs-12">
+			<div class="mainheading">
+
+				<!-- Begin Top Meta -->
+				<div class="row post-top-meta">
+					<div class="col-md-10">
+                        <div class="mainheading">
+                            <a class="link-dark" href="{% url "tags:detail" object.title %}"><h1 class="sitetitle">
+                                {{ object.title}}</h1></a>
+                        </div>
+					</div>
+
+				</div>
+            </div>
+        </div>
+    </div>
+
+    <section class="featured-posts">
+	<div class="section-title">
+        <h2><span>Posts of tag {{ object.title }}</span></h2>
+    </div>
+    <div class="card-columns listfeaturedtag">
+
+        <!-- begin post -->
+        {% for object in object.posts.all %}
+        <div class="card">
+            <div class="row">
+                <div class="col-md-5 wrapthumbnail">
+                    <a href="{{ object.get_absolute_url }}">
+                        <div class="thumbnail" style="background-image:url({{ object.image.url }});">
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-7">
+                    <div class="card-block">
+                        <h2 class="card-title"><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></h2>
+                        <h4 class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</h4>
+                        <div class="metafooter">
+                            <div class="wrapfooter">
+                                <span class="meta-footer-thumb"><span class="post-date">{{ object.timestamp|timesince }}</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end post -->
+        {% empty %}
+            {% if request.GET.q %}
+                <p>No Post found.</p>
+            {% else %}
+                <p>No Posts yet.</p>
+            {% endif %}
+        {% endfor %}
+    </div>
+    </section>
+    <!-- End Featured
+	================================================== -->
+    <div class="hideshare"></div>
+    </div>
+{#    ###################}
+    <div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+    </div>
+{% endblock %}

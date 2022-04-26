@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+{% load recommended %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}{{ block.super }}{{ object.username }}{% endblock %}
+{% block content %}
+{#    <div class="row m-2">#}
+{#        <div class="col-sm-2 col-xs-12">#}
+{#            <a href='{% url "accounts:detail" object.username %}'>#}
+{#                <h1>{{ object.username }}</h1>#}
+{#            </a>#}
+{#            <hr>#}
+{#        {% if object == request.user %}#}
+{#        {% else %}#}
+{#            <p>#}
+{#                <a class="btn btn-primary"#}
+{#                   href="{{ object.profile.get_follow_url }}">#}
+{#                    {% if following %}Unfollow{% else %}Follow{% endif %}#}
+{#                </a>#}
+{#            </p>#}
+{#        {% endif %}#}
+{#            <p>Followers: {{ object.followed_by.all.count }}</p>#}
+{#        </div>#}
+{#        <div class="col-sm-5 col-xs-12">#}
+{#            <h3>My Posts</h3>#}
+{#            {% for post in object.post_set.all %}#}
+{#                <div id="post-container">#}
+{#                    <div class="card mb-2 " style="width: 25rem;">#}
+{#                        <div class="card-body">#}
+{#                            <h5 class="card-title">{{ post.title }}</h5>#}
+{#                            <p class="card-text">{{ post.timestamp|timesince }}#}
+{#                                ago</p>#}
+{#                            <a href="{{ post.get_absolute_url }}"#}
+{#                               class="btn btn-secondary">View</a>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            {% empty %}#}
+{#                {% if request.GET.q %}#}
+{#                    <p>No Post found.</p>#}
+{#                {% else %}#}
+{#                    <p>No Posts yet.</p>#}
+{#                {% endif %}#}
+{##}
+{#            {% endfor %}#}
+{#        </div>#}
+{#        <div class="col-sm-2 col-xs-12">#}
+{#            <h3>Following#}
+{#                <small>({{ object.profile.get_following.count }})</small></h3>#}
+{##}
+{#            <div id="post-container">#}
+{#                <div class="card mb-2 " style="width: 10rem;">#}
+{#                    <div class="card-body">#}
+{#                        {% for user in object.profile.get_following %}#}
+{#                            <a href='{% url "accounts:detail" user.username %}'>#}
+{#                                <h5 class="card-title">{{ user.username }}</h5>#}
+{#                            </a>#}
+{#                        {% empty %}#}
+{#                            <h4>No one</h4>#}
+{#                        {% endfor %}#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#        <div class="col-sm-2 col-xs-12">#}
+{#            <h3>Follower</h3>#}
+{##}
+{#            <div id="post-container">#}
+{#                <div class="card mb-2 " style="width: 10rem;">#}
+{#                    <div class="card-body">#}
+{#                        {% for profile in object.followed_by.all %}#}
+{#                            <a href='{% url "accounts:detail" profile.user.username %}'>#}
+{#                                <h5 class="card-title">#}
+{#                                    {{ profile.user.username }}#}
+{#                                </h5>#}
+{#                            </a>#}
+{#                        {% empty %}#}
+{#                            <h4>No one</h4>#}
+{#                        {% endfor %}#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{##}
+{#        </div>#}
+{##}
+{#    </div>#}
+    <div class="container">
+
+	<div class="row">
+        <div class="col-md-8 col-md-offset-2 col-xs-12">
+			<div class="mainheading">
+
+				<!-- Begin Top Meta -->
+				<div class="row post-top-meta">
+					<div class="col-md-2">
+						<a href="{% url "accounts:detail" object.username %}"><img class="author-thumb" src="https://www.gravatar.com/avatar/e56154546cf4be74e393c62d1ae9f9d4?s=250&amp;d=mm&amp;r=x" alt="Sal"></a>
+					</div>
+					<div class="col-md-10">
+                    <a class="link-dark" href="{% url "accounts:detail" object.username %}"><h5>{{ object.username }}</h5></a>
+                    <p class="text-secondary">{{ object.email }}</p>
+                        {% if object == request.user %}
+                        {% else %}
+                        <a href="{{ object.profile.get_follow_url }}" class="btn follow">{% if following %}Unfollow{% else %}Follow{% endif %}</a>
+                        {% endif %}
+					</div>
+
+                </div>
+
+
+				</div>
+            </div>
+        {% recommended request.user %}
+        </div>
+
+			<!-- Begin Featured
+	================================================== -->
+
+    <section class="featured-posts">
+	<div class="section-title">
+        <h2><span>My Posts</span></h2>
+    </div>
+    <div class="card-columns listfeaturedtag">
+
+        <!-- begin post -->
+        {% for object in object.post_set.all %}
+        <div class="card">
+            <div class="row">
+                <div class="col-md-5 wrapthumbnail">
+                    <a href="{{ object.get_absolute_url }}">
+                        <div class="thumbnail" style="background-image:url({{ object.image.url }});">
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-7">
+                    <div class="card-block">
+                        <h2 class="card-title"><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></h2>
+                        <h4 class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</h4>
+                        <div class="metafooter">
+                            <div class="wrapfooter">
+                                <span class="meta-footer-thumb"><span class="post-date">{{ object.timestamp|timesince }}</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end post -->
+        {% empty %}
+            {% if request.GET.q %}
+                <p>No Post found.</p>
+            {% else %}
+                <p>No Posts yet.</p>
+            {% endif %}
+        {% endfor %}
+    </div>
+    </section>
+    <!-- End Featured
+	================================================== -->
+    <div class="hideshare"></div>
+    </div>
+    </div>
+
+
+{#    </div>#}
+{#    <div class="graybg">#}
+{#	<div class="container">#}
+{#        <div class="row listrecent listrelated">#}
+{#            <!-- begin post -->#}
+{#            {% rec_posts request.user %}#}
+{#		<!-- end post -->#}
+{#        </div>#}
+{#    </div>#}
+{#    </div>#}
+
+{% endblock %}
